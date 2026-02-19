@@ -1,0 +1,180 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d5cd8515-f40b-4096-bb0e-a31f8d0d9d28",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\"\"\"\n",
+    "EcoTrek Solutions – Week 5 Web Presentation\n",
+    "Option 2 – Vibe Coding (Streamlit Version)\n",
+    "\n",
+    "This app visualizes:\n",
+    "1) Number of reviews by sentiment\n",
+    "2) Three word clouds (positive, neutral, negative)\n",
+    "\"\"\"\n",
+    "\n",
+    "# ===============================\n",
+    "# IMPORTS\n",
+    "# ===============================\n",
+    "\n",
+    "import pandas as pd\n",
+    "import streamlit as st\n",
+    "import matplotlib.pyplot as plt\n",
+    "from wordcloud import WordCloud\n",
+    "\n",
+    "\n",
+    "# ===============================\n",
+    "# TITLE\n",
+    "# ===============================\n",
+    "st.set_page_config(page_title=\"EcoTrek Review Dashboard\")\n",
+    "st.title(\"EcoTrek Solutions – Customer Review Sentiment Dashboard\")\n",
+    "\n",
+    "\n",
+    "# ===============================\n",
+    "# PAGE DESCRIPTION\n",
+    "# ===============================\n",
+    "st.write(\"\"\"\n",
+    "This interactive dashboard summarizes customer review sentiment for EcoTrek products.\n",
+    "It displays:\n",
+    "• The number of reviews in each sentiment category  \n",
+    "• A word cloud for positive, neutral, and negative reviews\n",
+    "\"\"\")\n",
+    "\n",
+    "\n",
+    "# ===============================\n",
+    "# LOAD DATA\n",
+    "# ===============================\n",
+    "# Using the uploaded dataset from Assignment 4\n",
+    "file_path = \"Thirunagari_Samay_sentiment.csv\"\n",
+    "df = pd.read_csv(file_path)\n",
+    "\n",
+    "\n",
+    "# Ensure consistent column names\n",
+    "df.columns = df.columns.str.strip()\n",
+    "\n",
+    "# Identify likely column names\n",
+    "sentiment_col = \"Sentiment\"\n",
+    "review_col = \"Review\"\n",
+    "\n",
+    "streamlit run Thirunagari_S_5.py\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "496e1ded-8fd1-4450-9e34-231c09f83f8d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ===============================\n",
+    "# VISUALIZATION 1\n",
+    "# Review Counts by Sentiment\n",
+    "# ===============================\n",
+    "st.header(\"Review Counts by Sentiment\")\n",
+    "\n",
+    "counts = df[sentiment_col].value_counts()\n",
+    "\n",
+    "fig1 = plt.figure(figsize=(6,4))\n",
+    "plt.bar(counts.index, counts.values)\n",
+    "plt.xlabel(\"Sentiment\")\n",
+    "plt.ylabel(\"Number of Reviews\")\n",
+    "plt.title(\"Customer Reviews by Sentiment\")\n",
+    "st.pyplot(fig1)\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bc50ad59-c5a7-472a-9672-05d629cb1d05",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ===============================\n",
+    "# VISUALIZATION 2\n",
+    "# Word Clouds by Sentiment\n",
+    "# ===============================\n",
+    "st.header(\"Word Clouds by Sentiment\")\n",
+    "\n",
+    "def generate_wordcloud(text, title):\n",
+    "    wc = WordCloud(width=800, height=400, background_color=\"white\").generate(text)\n",
+    "    fig = plt.figure(figsize=(8,4))\n",
+    "    plt.imshow(wc, interpolation=\"bilinear\")\n",
+    "    plt.axis(\"off\")\n",
+    "    plt.title(title)\n",
+    "    return fig\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cddea7d3-25a1-49bc-a046-583999084c41",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Positive Reviews\n",
+    "positive_text = \" \".join(df[df[sentiment_col] == \"positive\"][review_col].dropna())\n",
+    "st.subheader(\"Positive Reviews\")\n",
+    "st.pyplot(generate_wordcloud(positive_text, \"Positive Reviews Word Cloud\"))\n",
+    "\n",
+    "# Neutral Reviews\n",
+    "neutral_text = \" \".join(df[df[sentiment_col] == \"neutral\"][review_col].dropna())\n",
+    "st.subheader(\"Neutral Reviews\")\n",
+    "st.pyplot(generate_wordcloud(neutral_text, \"Neutral Reviews Word Cloud\"))\n",
+    "\n",
+    "# Negative Reviews\n",
+    "negative_text = \" \".join(df[df[sentiment_col] == \"negative\"][review_col].dropna())\n",
+    "st.subheader(\"Negative Reviews\")\n",
+    "st.pyplot(generate_wordcloud(negative_text, \"Negative Reviews Word Cloud\"))\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1228d0f7-2a0a-492b-b986-d4dbc2b030f9",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cebf2392-97cd-49ef-b770-93617bea29f7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "python -m pip install streamlit wordcloud matplotlib pandas\n",
+    "cd \"C:\\Users\\thiru\\iCloudDrive\\Desktop\\ASU MBA\\1 - Classes\\Q3\\CIS 507 - AI 1\\Week 5\\Assignment\"\n",
+    "python -m streamlit run Thirunagari_S_5.py\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:base] *",
+   "language": "python",
+   "name": "conda-base-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
